@@ -42,6 +42,6 @@ def collage():
             img = img.resize((100,100))
             new.paste(img, (0,0))
             new.paste(img, (100,100))
-    new.save("dab.png", optimize=True)
+    new.save("dab.jpg", optimize=True)
 
 collage()

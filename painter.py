@@ -25,23 +25,35 @@ def add_top(img,caption):
 
 
 def collage():
-    new = Image.new("RGBA", (2000,2000))
+    image_w, image_h = 2000,2000
+    collage_s = 100
+    layerW = Image.open("static/fisW.png")
+    layerB = Image.open("static/fisB.png")
+    new = Image.new(layerW.mode, (image_w,image_h))
     file_dict = {
         1: "haifa",
         2: "israel",
         3: "jerusalem",
-        4: "star_of_david",
-        5: "tel_aviv",
-        6: "zionism"
+        4: "tel_aviv",
+        5: "zionism",
     }
-    line = 0
+    x,y = 0,0
     for directory in file_dict.values():
-        for imageFile in os.listdir(f"static/{directory}")[:30]:
+        try:
+            os.remove(f"static/{directory}/.DS_Store")
+        except Exception as e:
+            print(e)
+        for imageFile in os.listdir(f"static/{directory}")[:100]:
             # put the image
             img = Image.open(f'static/{directory}/{imageFile}')
-            img = img.resize((100,100))
-            new.paste(img, (0,0))
-            new.paste(img, (100,100))
-    new.save("dab.jpg", optimize=True)
+            img = img.resize((collage_s,collage_s))
+            new.paste(img, (x,y))
+            if x >= image_w: 
+                y += collage_s
+                x = 0
+            else: x += collage_s
+    new = Image.blend(new, layerW, 0.20)
+    new = Image.blend(new, layerB, 0.03)
+    new.save("dab.png", optimize=True)
 
 collage()
